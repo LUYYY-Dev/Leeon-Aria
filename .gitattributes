@@ -1,0 +1,11 @@
+# 统一换行符，避免不同机器克隆后脚本失效
+#
+# 背景：Windows 的 cmd.exe 无法正确解析 LF 换行的 .cmd 文件，
+# 会从单词中间截断命令，双击后直接报错甚至闪退。
+# 这里强制这些脚本在检出时使用 CRLF，不受各人 git config 影响。
+
+* text=auto eol=lf
+
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
