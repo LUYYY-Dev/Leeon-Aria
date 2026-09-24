@@ -1,0 +1,16 @@
+{{- $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse -}}
+[
+{{- range $i, $p := $posts }}
+{{- if $i }},{{ end }}
+{
+  "title": {{ $p.Title | jsonify }},
+  "permalink": {{ $p.RelPermalink | jsonify }},
+  "date": {{ $p.Date.Format "2006-01-02" | jsonify }},
+  "summary": {{ ($p.Summary | plainify | htmlUnescape | chomp) | jsonify }},
+  "content": {{ ($p.Plain | htmlUnescape | chomp) | jsonify }},
+  "tags": {{ $p.Params.tags | jsonify }},
+  "categories": {{ $p.Params.categories | jsonify }},
+  "readingTime": {{ $p.ReadingTime }}
+}
+{{- end }}
+]

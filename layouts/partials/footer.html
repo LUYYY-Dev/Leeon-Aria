@@ -1,0 +1,47 @@
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <div class="site-footer__brand">
+      <span class="brand__name brand__name--lg">{{ site.Title }}</span>
+      <p class="site-footer__bio">{{ site.Params.author.bio | default site.Params.description }}</p>
+      <div class="social">
+        {{- range site.Params.social }}
+        <a class="social__link" href="{{ partial "url.html" .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }}" title="{{ .name }}">
+          {{ partial "icon.html" (dict "name" .icon "size" 18) }}
+        </a>
+        {{- end }}
+      </div>
+    </div>
+
+    <div class="site-footer__cols">
+      <div class="site-footer__col">
+        <h4 class="site-footer__title">导航</h4>
+        <ul class="site-footer__links">
+          {{- range site.Menus.main }}
+          <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
+          {{- end }}
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h4 class="site-footer__title">订阅</h4>
+        <ul class="site-footer__links">
+          <li><a href="{{ partial "url.html" "index.xml" }}">RSS 订阅</a></li>
+          <li><a href="{{ partial "url.html" "sitemap.xml" }}">站点地图</a></li>
+          <li><a href="{{ partial "url.html" "index.json" }}">搜索索引</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell site-footer__bottom">
+    <p>&copy; {{ now.Year }} {{ site.Title }}. 保留所有权利。</p>
+    <p class="site-footer__powered">
+      由 <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> 构建 ·
+      托管于 <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>
+    </p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="回到顶部" title="回到顶部">
+  {{ partial "icon.html" (dict "name" "up" "size" 18) }}
+</button>

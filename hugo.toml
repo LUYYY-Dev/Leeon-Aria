@@ -1,0 +1,192 @@
+# =============================================================================
+#  Leeon & Aria  ·  个人博客站点配置
+#  改完保存即可，Hugo 会自动重新构建。
+# =============================================================================
+
+# 本地预览地址。部署到 GitHub Pages 时由 GitHub Actions 自动覆盖，不用改。
+baseURL = "http://localhost:1313/"
+
+# 站点标题 / 一句话简介
+title = "Leeon & Aria"
+description = "在数据与直觉之间，记录我们关于世界、技术与生活的思考。"
+
+locale = "zh-cn"
+defaultContentLanguage = "zh-cn"
+hasCJKLanguage = true          # 中文按字数统计阅读时长与摘要
+enableEmoji = true
+enableRobotsTXT = true
+timeZone = "Asia/Shanghai"
+summaryLength = 120
+
+# ---------------------------------------------------------------------------
+#  分页：每页文章数
+# ---------------------------------------------------------------------------
+[pagination]
+  pagerSize = 9
+
+# ---------------------------------------------------------------------------
+#  输出格式：首页额外输出 JSON，作为站内搜索的数据源
+# ---------------------------------------------------------------------------
+[outputs]
+  home     = ["HTML", "RSS", "JSON"]
+  section  = ["HTML", "RSS"]
+  taxonomy = ["HTML"]
+  term     = ["HTML", "RSS"]
+
+[outputFormats.JSON]
+  mediaType   = "application/json"
+  baseName    = "index"
+  isPlainText = true
+
+# ---------------------------------------------------------------------------
+#  内容渲染
+# ---------------------------------------------------------------------------
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true            # 允许在 Markdown 里直接写 HTML
+  [markup.highlight]
+    noClasses = false          # 使用 CSS 类，方便暗色/亮色切换
+    guessSyntax = true
+    lineNos = false
+    tabWidth = 4
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+    ordered = false
+
+# ---------------------------------------------------------------------------
+#  分类法
+# ---------------------------------------------------------------------------
+[taxonomies]
+  tag      = "tags"
+  category = "categories"
+  series   = "series"
+
+# ===========================================================================
+#  params：站点外观与功能开关
+# ===========================================================================
+[params]
+
+  # -------- 首页主视觉 --------
+  [params.hero]
+    greeting      = "Hello, we are"
+    title         = "Leeon & Aria"
+    tagline       = "知识 · 分析 · 记录"
+    subtitle      = "把零散的观察整理成可以复用的知识，把一时的好奇沉淀成长期的地图。"
+    typing        = [
+      "写代码，也写思考。",
+      "对世界保持好奇。",
+      "把复杂的问题讲清楚。",
+      "长期主义地记录。",
+    ]
+    primaryLabel   = "开始阅读"
+    primaryLink    = "/posts/"
+    secondaryLabel = "关于我们"
+    secondaryLink  = "/about/"
+
+  # -------- 外观 --------
+  [params.appearance]
+    default = "dark"           # dark | light | auto（跟随系统）
+    accent  = "violet"         # violet | cyan | amber | rose | emerald
+
+  # -------- 站内搜索 --------
+  [params.search]
+    enable      = true
+    placeholder = "搜索文章、标签或关键词…"
+
+  # -------- 首页动效开关（想关掉哪个就把对应项改成 false）--------
+  [params.effects]
+    aurora         = true      # 极光渐变背景
+    particles      = true      # 粒子星链网络
+    cursorGlow     = true      # 鼠标跟随光晕
+    tiltCards      = true      # 卡片 3D 倾斜
+    revealOnScroll = true      # 滚动渐入
+
+  # -------- 作者信息 --------
+  [params.author]
+    name   = "Leeon & Aria"
+    bio    = "两个持续记录的人。"
+    email  = ""
+    avatar = ""                # 例如 "/images/avatar.png"，留空则不显示
+
+  # -------- 页脚社交链接 --------
+  [[params.social]]
+    name = "GitHub"
+    icon = "github"
+    url  = "https://github.com/LUYYY-Dev"
+  [[params.social]]
+    name = "RSS"
+    icon = "rss"
+    url  = "/index.xml"
+  [[params.social]]
+    name = "Email"
+    icon = "mail"
+    url  = "mailto:3169936315@qq.com"
+
+  # -------- 评论：Giscus（基于 GitHub Discussions，免费无广告）--------
+  # 依次打开：GitHub 仓库 → Settings → General → Features 勾选 Discussions
+  # 然后访问 https://giscus.app 填好仓库，把生成的 4 个 ID 抄到这里，
+  # 最后把 enable 改成 true 即可。
+  [params.comments]
+    enable            = false
+    repo              = ""     # 形如 "yourname/blog-comments"
+    repoId            = ""
+    category          = "Announcements"
+    categoryId        = ""
+    mapping           = "pathname"
+    reactionsEnabled  = "1"
+    inputPosition     = "top"
+    lang              = "zh-CN"
+
+  # -------- 文章页 --------
+  [params.article]
+    showToc        = true      # 显示目录
+    showReadingTime = true
+    showWordCount  = true
+    showLastMod    = true
+    showRelated    = true      # 相关文章
+    relatedCount   = 3
+
+# ===========================================================================
+#  相关文章：按标签 / 分类 / 时间的相似度计算
+# ===========================================================================
+[related]
+  threshold   = 20
+  includeNewer = true
+  toLower     = false
+
+  [[related.indices]]
+    name   = "tags"
+    weight = 100
+  [[related.indices]]
+    name   = "categories"
+    weight = 50
+  [[related.indices]]
+    name   = "date"
+    weight = 10
+
+# ===========================================================================
+#  顶部导航
+# ===========================================================================
+[menus]
+  [[menus.main]]
+    name    = "首页"
+    pageRef = "/"
+    weight  = 10
+  [[menus.main]]
+    name    = "文章"
+    pageRef = "/posts"
+    weight  = 20
+  [[menus.main]]
+    name    = "归档"
+    pageRef = "/archives"
+    weight  = 30
+  [[menus.main]]
+    name    = "标签"
+    pageRef = "/tags"
+    weight  = 40
+  [[menus.main]]
+    name    = "关于"
+    pageRef = "/about"
+    weight  = 50

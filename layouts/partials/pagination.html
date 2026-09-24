@@ -1,0 +1,28 @@
+{{- $p := .Paginator -}}
+{{- if gt $p.TotalPages 1 }}
+<nav class="pager reveal" aria-label="分页导航">
+  {{- with $p.Prev }}
+  <a class="pager__btn" href="{{ .URL }}" rel="prev">
+    {{ partial "icon.html" (dict "name" "arrow-left" "size" 16) }}<span>上一页</span>
+  </a>
+  {{- else }}
+  <span class="pager__btn is-disabled">{{ partial "icon.html" (dict "name" "arrow-left" "size" 16) }}<span>上一页</span></span>
+  {{- end }}
+
+  <ul class="pager__nums">
+    {{- range $p.Pagers }}
+    <li>
+      <a class="pager__num{{ if eq . $p }} is-active{{ end }}" href="{{ .URL }}"{{ if eq . $p }} aria-current="page"{{ end }}>{{ .PageNumber }}</a>
+    </li>
+    {{- end }}
+  </ul>
+
+  {{- with $p.Next }}
+  <a class="pager__btn" href="{{ .URL }}" rel="next">
+    <span>下一页</span>{{ partial "icon.html" (dict "name" "arrow-right" "size" 16) }}
+  </a>
+  {{- else }}
+  <span class="pager__btn is-disabled"><span>下一页</span>{{ partial "icon.html" (dict "name" "arrow-right" "size" 16) }}</span>
+  {{- end }}
+</nav>
+{{- end }}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.Locale | default "zh-cn" }}"
+      data-theme="{{ site.Params.appearance.default | default "dark" }}"
+      data-accent="{{ site.Params.appearance.accent | default "violet" }}">
+<head>
+  {{- partial "head.html" . -}}
+</head>
+<body class="{{ if .IsHome }}is-home{{ else }}is-inner{{ end }}">
+  {{- if site.Params.effects.aurora }}
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__blob aurora__blob--1"></span>
+    <span class="aurora__blob aurora__blob--2"></span>
+    <span class="aurora__blob aurora__blob--3"></span>
+    <span class="aurora__grid"></span>
+  </div>
+  {{- end }}
+  {{- if site.Params.effects.particles }}
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  {{- end }}
+  {{- if site.Params.effects.cursorGlow }}
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  {{- end }}
+
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  {{- partial "header.html" . -}}
+
+  <main id="main" class="main">
+    {{- block "main" . }}{{ end -}}
+  </main>
+
+  {{- partial "footer.html" . -}}
+  {{- partial "search.html" . -}}
+  {{- partial "scripts.html" . -}}
+</body>
+</html>

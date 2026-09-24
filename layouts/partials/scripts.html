@@ -1,0 +1,6 @@
+{{- $opts := dict "target" "es2020" "minify" (not hugo.IsServer) "format" "iife" -}}
+{{- $js := resources.Get "js/main.js" | js.Build $opts | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+{{- if site.Params.effects.particles }}
+<script>window.__LA_EFFECTS__ = {{ site.Params.effects | jsonify | safeJS }};</script>
+{{- end }}

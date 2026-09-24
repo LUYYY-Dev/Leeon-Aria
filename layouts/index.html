@@ -1,0 +1,124 @@
+{{ define "main" }}
+{{- $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse -}}
+{{- $featured := index $posts 0 -}}
+{{- $rest := after 1 $posts -}}
+{{- $tagCount := len site.Taxonomies.tags -}}
+{{- $catCount := len site.Taxonomies.categories -}}
+{{- $words := 0 -}}
+{{- range $posts }}{{ $words = add $words .WordCount }}{{ end -}}
+
+{{ partial "hero.html" . }}
+
+<section class="section section--stats">
+  <div class="shell">
+    <div class="stats reveal">
+      <div class="stat">
+        <span class="stat__num" data-count="{{ len $posts }}">{{ len $posts }}</span>
+        <span class="stat__label">篇文章</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-count="{{ $tagCount }}">{{ $tagCount }}</span>
+        <span class="stat__label">个标签</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-count="{{ $catCount }}">{{ $catCount }}</span>
+        <span class="stat__label">个分类</span>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-count="{{ $words }}" data-suffix="+">{{ $words }}+</span>
+        <span class="stat__label">累计字数</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{- with $featured }}
+<section class="section">
+  <div class="shell">
+    <header class="section__head reveal">
+      <h2 class="section__title"><span class="section__mark"></span>最新发布</h2>
+      <a class="section__more" href="{{ partial "url.html" "/posts/" }}">全部文章 {{ partial "icon.html" (dict "name" "arrow-right" "size" 15) }}</a>
+    </header>
+
+    <article class="feature reveal" {{ if site.Params.effects.tiltCards }}data-tilt{{ end }}>
+      <div class="feature__aura" aria-hidden="true"></div>
+      <div class="feature__body">
+        <div class="feature__tags">
+          {{- range .Params.categories }}<span class="pill pill--accent">{{ . }}</span>{{ end }}
+          {{- range first 2 .Params.tags }}<span class="pill">{{ . }}</span>{{ end }}
+        </div>
+        <h3 class="feature__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p class="feature__summary">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>
+        <div class="feature__meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006 年 01 月 02 日" }}</time>
+          <span class="dot" aria-hidden="true"></span>
+          <span>{{ .ReadingTime }} 分钟阅读</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>{{ .WordCount }} 字</span>
+        </div>
+        <a class="btn btn--primary btn--sm" href="{{ .RelPermalink }}">
+          <span>阅读全文</span>
+          {{ partial "icon.html" (dict "name" "arrow-right" "size" 16) }}
+        </a>
+      </div>
+      <div class="feature__deco" aria-hidden="true">
+        <span class="orbit"><i></i><i></i><i></i></span>
+        <span class="feature__deco-ring"></span>
+        <span class="feature__deco-ring feature__deco-ring--2"></span>
+      </div>
+    </article>
+  </div>
+</section>
+{{- end }}
+
+<section class="section">
+  <div class="shell">
+    <header class="section__head reveal">
+      <h2 class="section__title"><span class="section__mark"></span>近期文章</h2>
+    </header>
+    <div class="grid">
+      {{- range first 6 $rest }}
+      {{ partial "post-card.html" (dict "page" .) }}
+      {{- end }}
+    </div>
+    {{- if gt (len $rest) 6 }}
+    <div class="section__foot reveal">
+      <a class="btn btn--ghost" href="{{ partial "url.html" "/posts/" }}">查看全部 {{ len $posts }} 篇文章</a>
+    </div>
+    {{- end }}
+  </div>
+</section>
+
+{{- with site.Taxonomies.tags }}
+<section class="section">
+  <div class="shell">
+    <header class="section__head reveal">
+      <h2 class="section__title"><span class="section__mark"></span>按标签浏览</h2>
+      <a class="section__more" href="{{ partial "url.html" "/tags/" }}">全部标签 {{ partial "icon.html" (dict "name" "arrow-right" "size" 15) }}</a>
+    </header>
+    <div class="tagcloud reveal">
+      {{- range .ByCount }}
+      <a class="tagcloud__item" href="{{ .Page.RelPermalink }}">
+        <span class="tagcloud__name">{{ .Page.Title }}</span>
+        <span class="tagcloud__count">{{ .Count }}</span>
+      </a>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{- end }}
+
+<section class="section">
+  <div class="shell">
+    <div class="cta reveal">
+      <div class="cta__glow" aria-hidden="true"></div>
+      <h2 class="cta__title">想做点什么，就从记录开始</h2>
+      <p class="cta__text">{{ site.Params.description }}</p>
+      <div class="cta__actions">
+        <a class="btn btn--primary" href="{{ partial "url.html" "/posts/" }}">开始阅读</a>
+        <a class="btn btn--ghost" href="{{ partial "url.html" "/index.xml" }}">订阅 RSS</a>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

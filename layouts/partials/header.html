@@ -1,0 +1,53 @@
+{{- $current := .RelPermalink -}}
+<header class="site-header" id="siteHeader">
+  <div class="shell site-header__inner">
+    <a class="brand" href="{{ partial "url.html" "/" }}" aria-label="{{ site.Title }} 首页">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="30" height="30" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="brandGrad" x1="0" y1="0" x2="32" y2="32">
+              <stop offset="0%" stop-color="var(--accent)"/>
+              <stop offset="100%" stop-color="var(--accent-2)"/>
+            </linearGradient>
+          </defs>
+          <rect x="1.5" y="1.5" width="29" height="29" rx="9" stroke="url(#brandGrad)" stroke-width="1.6" opacity=".55"/>
+          <path d="M9 21V11l4 5 4-5v10" stroke="url(#brandGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="22" cy="11.5" r="2.2" fill="url(#brandGrad)"/>
+        </svg>
+      </span>
+      <span class="brand__text">
+        <span class="brand__name">{{ site.Title }}</span>
+        <span class="brand__tag">{{ site.Params.hero.tagline }}</span>
+      </span>
+    </a>
+
+    <nav class="nav" id="primaryNav" aria-label="主导航">
+      <ul class="nav__list">
+        {{- range site.Menus.main }}
+        {{- $active := or (eq $current .URL) (and (ne .URL "/") (hasPrefix $current .URL)) }}
+        <li class="nav__item">
+          <a class="nav__link{{ if $active }} is-active{{ end }}" href="{{ .URL | relURL }}"{{ if $active }} aria-current="page"{{ end }}>
+            <span>{{ .Name }}</span>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      {{- if site.Params.search.enable }}
+      <button class="icon-btn" type="button" id="searchOpen" aria-label="搜索（快捷键 /）" title="搜索  /">
+        {{ partial "icon.html" (dict "name" "search" "size" 18) }}
+      </button>
+      {{- end }}
+      <button class="icon-btn" type="button" id="themeToggle" aria-label="切换深色/浅色模式" title="切换主题">
+        <span class="icon-btn__sun">{{ partial "icon.html" (dict "name" "sun" "size" 18) }}</span>
+        <span class="icon-btn__moon">{{ partial "icon.html" (dict "name" "moon" "size" 18) }}</span>
+      </button>
+      <button class="icon-btn icon-btn--menu" type="button" id="menuToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="primaryNav">
+        {{ partial "icon.html" (dict "name" "menu" "size" 20) }}
+      </button>
+    </div>
+  </div>
+  <div class="site-header__progress" id="readProgress" aria-hidden="true"></div>
+</header>

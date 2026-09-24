@@ -1,0 +1,111 @@
+{{ define "main" }}
+{{- $showToc := and site.Params.article.showToc (ne .TableOfContents "") -}}
+<article class="article">
+  <div class="shell">
+    <nav class="crumbs" aria-label="面包屑">
+      <a href="{{ partial "url.html" "/" }}">首页</a>
+      <span class="crumbs__sep" aria-hidden="true">/</span>
+      {{- with .Section }}
+      <a href="{{ partial "url.html" (printf "/%s/" .) }}">{{ if eq . "posts" }}文章{{ else }}{{ . }}{{ end }}</a>
+      <span class="crumbs__sep" aria-hidden="true">/</span>
+      {{- end }}
+      <span class="crumbs__here">{{ .Title | truncate 30 }}</span>
+    </nav>
+
+    <div class="article__layout{{ if $showToc }} has-toc{{ end }}">
+      <div class="article__body">
+        <header class="article__header">
+          <div class="article__pills">
+            {{- range .Params.categories }}<a class="pill pill--accent" href="{{ partial "url.html" (printf "/categories/%s/" (urlize .)) }}">{{ . }}</a>{{ end }}
+            {{- range .Params.tags }}<a class="pill" href="{{ partial "url.html" (printf "/tags/%s/" (urlize .)) }}">#{{ . }}</a>{{ end }}
+          </div>
+
+          <h1 class="article__title">{{ .Title }}</h1>
+
+          {{- with .Params.summary }}
+          <p class="article__lede">{{ . }}</p>
+          {{- end }}
+
+          <div class="article__meta">
+            <span class="article__meta-item">{{ partial "icon.html" (dict "name" "clock" "size" 15) }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006 年 01 月 02 日" }}</time></span>
+            {{- if site.Params.article.showReadingTime }}
+            <span class="article__meta-item">{{ partial "icon.html" (dict "name" "book" "size" 15) }}约 {{ .ReadingTime }} 分钟</span>
+            {{- end }}
+            {{- if site.Params.article.showWordCount }}
+            <span class="article__meta-item">共 {{ .WordCount }} 字</span>
+            {{- end }}
+            {{- if and site.Params.article.showLastMod (ne (.Lastmod.Format "2006-01-02") (.Date.Format "2006-01-02")) }}
+            <span class="article__meta-item article__meta-item--dim">更新于 {{ .Lastmod.Format "2006-01-02" }}</span>
+            {{- end }}
+          </div>
+
+          {{- if $showToc }}
+          <details class="toc-mobile">
+            <summary>本页目录</summary>
+            {{ .TableOfContents }}
+          </details>
+          {{- end }}
+        </header>
+
+        <div class="prose" id="articleContent">
+          {{ .Content }}
+        </div>
+
+        <footer class="article__footer">
+          {{- with .Params.tags }}
+          <div class="article__taglist">
+            <span class="article__taglabel">标签</span>
+            {{- range . }}<a class="tag tag--lg" href="{{ partial "url.html" (printf "/tags/%s/" (urlize .)) }}">#{{ . }}</a>{{ end }}
+          </div>
+          {{- end }}
+
+          {{- $prev := .PrevInSection -}}
+          {{- $next := .NextInSection -}}
+          {{- if or $prev $next }}
+          <nav class="adjacent" aria-label="上下篇">
+            {{- with $prev }}
+            <a class="adjacent__item adjacent__item--prev" href="{{ .RelPermalink }}">
+              <span class="adjacent__label">{{ partial "icon.html" (dict "name" "arrow-left" "size" 14) }} 上一篇</span>
+              <span class="adjacent__title">{{ .Title }}</span>
+            </a>
+            {{- end }}
+            {{- with $next }}
+            <a class="adjacent__item adjacent__item--next" href="{{ .RelPermalink }}">
+              <span class="adjacent__label">下一篇 {{ partial "icon.html" (dict "name" "arrow-right" "size" 14) }}</span>
+              <span class="adjacent__title">{{ .Title }}</span>
+            </a>
+            {{- end }}
+          </nav>
+          {{- end }}
+
+          {{- if site.Params.article.showRelated }}
+          {{- $related := site.RegularPages.Related . | first (site.Params.article.relatedCount | default 3) }}
+          {{- with $related }}
+          <section class="related">
+            <h2 class="related__title">相关阅读</h2>
+            <div class="grid grid--3">
+              {{- range $i, $p := . }}
+              {{ partial "post-card.html" (dict "page" $p "index" $i) }}
+              {{- end }}
+            </div>
+          </section>
+          {{- end }}
+          {{- end }}
+
+          {{- partial "comments.html" . }}
+        </footer>
+      </div>
+
+      {{- if $showToc }}
+      <aside class="article__aside">
+        <div class="toc" id="toc">
+          <p class="toc__title">本页目录</p>
+          {{ .TableOfContents }}
+          <div class="toc__progress" aria-hidden="true"><i></i></div>
+        </div>
+      </aside>
+      {{- end }}
+    </div>
+  </div>
+</article>
+{{ end }}

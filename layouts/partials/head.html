@@ -1,0 +1,92 @@
+{{- $isHome := .IsHome -}}
+{{- $title := "" -}}
+{{- if $isHome -}}
+  {{- $title = printf "%s · %s" site.Title (site.Params.hero.tagline | default site.Params.description) -}}
+{{- else -}}
+  {{- $title = printf "%s · %s" .Title site.Title -}}
+{{- end -}}
+{{- $desc := "" -}}
+{{- with .Description -}}
+  {{- $desc = . -}}
+{{- else -}}
+  {{- with .Summary -}}
+    {{- $desc = . | plainify | htmlUnescape | truncate 160 -}}
+  {{- else -}}
+    {{- $desc = site.Params.description -}}
+  {{- end -}}
+{{- end -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<meta name="author" content="{{ site.Params.author.name | default site.Title }}">
+<meta name="generator" content="Hugo {{ hugo.Version }}">
+<link rel="canonical" href="{{ .Permalink }}">
+
+<meta name="theme-color" content="#070912" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f7f8fc" media="(prefers-color-scheme: light)">
+
+{{- /* 在样式生效之前确定主题，避免深色/浅色闪烁 */ -}}
+<script>
+  (function () {
+    try {
+      var pref = {{ site.Params.appearance.default | default "dark" }};
+      if (pref !== 'dark' && pref !== 'light' && pref !== 'auto') pref = 'dark';
+      var saved = null;
+      try { saved = localStorage.getItem('la-theme'); } catch (e) {}
+      var theme = saved || (pref === 'auto'
+        ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+        : pref);
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+
+{{- /* 没有 JavaScript 时，滚动渐入的元素也要正常显示 */ -}}
+<noscript><style>.reveal{opacity:1 !important;translate:none !important}</style></noscript>
+
+{{- $css := slice (resources.Get "css/main.css") (resources.Get "css/chroma.css") | resources.Concat "css/bundle.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
+<link rel="apple-touch-icon" href="{{ "favicon.svg" | relURL }}">
+
+{{- with .OutputFormats.Get "RSS" }}
+<link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}">
+{{- end }}
+
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:locale" content="zh_CN">
+{{- with (.Params.images | default slice) }}
+<meta property="og:image" content="{{ index . 0 | absURL }}">
+{{- end }}
+{{- if .IsPage }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- with .Lastmod }}
+<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end }}
+{{- range .Params.tags }}
+<meta property="article:tag" content="{{ . }}">
+{{- end }}
+{{- end }}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+
+{{- if .IsPage }}
+{{- $ld := dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "description" $desc
+  "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "author" (dict "@type" "Person" "name" (site.Params.author.name | default site.Title))
+  "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+}}
+<script type="application/ld+json">{{ $ld | jsonify | safeJS }}</script>
+{{- end }}

@@ -1,0 +1,21 @@
+{{- /* 生成带 baseURL 子路径的站内链接。
+
+       用法：
+         {{ partial "url.html" "/posts/" }}
+         {{ partial "url.html" $hero.primaryLink }}
+
+       为什么需要它：
+       Hugo 的 relURL 只有在输入「不以 / 开头」时才会拼上 baseURL 的子路径。
+       本项目部署在 https://LUYYY-Dev.github.io/Leeon-Aria/ 这样的子目录下，
+       如果直接写 {{ "/posts/" | relURL }}，输出会是 /posts/ 而不是 /Leeon-Aria/posts/，
+       线上就会 404。这里统一先把开头的 / 去掉再交给 relURL。
+
+       外部链接、mailto、锚点原样返回；空值或 "/" 返回首页地址。 */ -}}
+{{- $u := . | default "" -}}
+{{- if or (eq $u "") (eq $u "/") -}}
+  {{- return site.Home.RelPermalink -}}
+{{- end -}}
+{{- if or (hasPrefix $u "http://") (hasPrefix $u "https://") (hasPrefix $u "mailto:") (hasPrefix $u "//") (hasPrefix $u "#") -}}
+  {{- return $u -}}
+{{- end -}}
+{{- return (strings.TrimPrefix "/" $u | relURL) -}}

@@ -1,0 +1,26 @@
+{{- $p := .page -}}
+{{- $variant := .variant | default "default" -}}
+{{- $index := .index | default 0 -}}
+<article class="card card--{{ $variant }} reveal" style="--reveal-delay: {{ mul $index 70 }}ms" {{ if site.Params.effects.tiltCards }}data-tilt{{ end }}>
+  <div class="card__aura" aria-hidden="true"></div>
+  <a class="card__main" href="{{ $p.RelPermalink }}">
+    <div class="card__top">
+      {{- with $p.Params.categories }}
+      <span class="pill pill--accent">{{ index . 0 }}</span>
+      {{- end }}
+      <time class="card__date" datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006.01.02" }}</time>
+    </div>
+    <h3 class="card__title">{{ $p.Title }}</h3>
+    <p class="card__summary">{{ $p.Summary | plainify | htmlUnescape | truncate 96 }}</p>
+    <div class="card__meta">
+      <span class="card__stat">{{ partial "icon.html" (dict "name" "clock" "size" 14) }}{{ $p.ReadingTime }} 分钟</span>
+      <span class="card__stat">{{ partial "icon.html" (dict "name" "book" "size" 14) }}{{ $p.WordCount }} 字</span>
+      <span class="card__more">阅读 {{ partial "icon.html" (dict "name" "arrow-right" "size" 14) }}</span>
+    </div>
+  </a>
+  {{- with $p.Params.tags }}
+  <ul class="card__tags">
+    {{- range first 3 . }}<li><a class="tag" href="{{ partial "url.html" (printf "/tags/%s/" (urlize .)) }}">#{{ . }}</a></li>{{ end }}
+  </ul>
+  {{- end }}
+</article>

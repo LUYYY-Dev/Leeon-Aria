@@ -1,0 +1,40 @@
+{{- $hero := site.Params.hero -}}
+<section class="hero">
+  <div class="shell hero__inner">
+    <p class="hero__greeting reveal">
+      <span class="pulse-dot" aria-hidden="true"></span>{{ $hero.greeting }}
+    </p>
+
+    <h1 class="hero__title reveal">
+      <span class="gradient-text" data-split>{{ $hero.title }}</span>
+    </h1>
+
+    <p class="hero__typing reveal" aria-live="polite">
+      <span class="typing" id="typingText"
+            data-words="{{ printf "%s" ($hero.typing | jsonify) }}"></span><span class="caret" aria-hidden="true"></span>
+    </p>
+
+    <p class="hero__subtitle reveal">{{ $hero.subtitle }}</p>
+
+    <div class="hero__actions reveal">
+      <a class="btn btn--primary" href="{{ partial "url.html" $hero.primaryLink }}">
+        <span>{{ $hero.primaryLabel }}</span>
+        {{ partial "icon.html" (dict "name" "arrow-right" "size" 17) }}
+      </a>
+      <a class="btn btn--ghost" href="{{ partial "url.html" $hero.secondaryLink }}">
+        <span>{{ $hero.secondaryLabel }}</span>
+      </a>
+    </div>
+
+    <ul class="hero__chips reveal">
+      {{- range first 4 (where site.RegularPages "Section" "posts").ByDate.Reverse }}
+      <li><a class="chip" href="{{ .RelPermalink }}">{{ .Title | truncate 22 }}</a></li>
+      {{- end }}
+    </ul>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true">
+    <span class="hero__scroll-line"></span>
+    <span class="hero__scroll-text">往下看</span>
+  </div>
+</section>

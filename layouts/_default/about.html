@@ -1,0 +1,47 @@
+{{ define "main" }}
+<section class="page-head page-head--about">
+  <div class="shell">
+    <div class="about-hero reveal">
+      <div class="about-hero__avatar" aria-hidden="true">
+        {{- with site.Params.author.avatar }}
+        <img src="{{ partial "url.html" . }}" alt="{{ site.Params.author.name }}">
+        {{- else }}
+        <span class="about-hero__initial">{{ substr site.Params.hero.title 0 1 }}</span>
+        {{- end }}
+        <span class="about-hero__ring"></span>
+      </div>
+      <h1 class="page-head__title">{{ .Title | default "关于" }}</h1>
+      {{- with .Description }}<p class="page-head__desc">{{ . }}</p>{{ end }}
+      <div class="social social--center">
+        {{- range site.Params.social }}
+        <a class="social__link" href="{{ partial "url.html" .url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .name }}" title="{{ .name }}">
+          {{ partial "icon.html" (dict "name" .icon "size" 18) }}
+        </a>
+        {{- end }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell shell--narrow">
+    <div class="prose reveal">
+      {{ .Content }}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="cta reveal">
+      <div class="cta__glow" aria-hidden="true"></div>
+      <h2 class="cta__title">来读点什么吧</h2>
+      <p class="cta__text">从最新的文章开始，或者在标签里找到你感兴趣的主题。</p>
+      <div class="cta__actions">
+        <a class="btn btn--primary" href="{{ partial "url.html" "/posts/" }}">全部文章</a>
+        <a class="btn btn--ghost" href="{{ partial "url.html" "/tags/" }}">按标签浏览</a>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,39 @@
+{{ define "main" }}
+{{- $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse -}}
+{{- $words := 0 -}}
+{{- range $posts }}{{ $words = add $words .WordCount }}{{ end -}}
+<section class="page-head">
+  <div class="shell">
+    <p class="page-head__kicker reveal">时间线</p>
+    <h1 class="page-head__title reveal">{{ .Title | default "归档" }}</h1>
+    <p class="page-head__desc reveal">共 {{ len $posts }} 篇 · {{ $words }} 字 · 跨越 {{ with $posts }}{{ (index . (sub (len .) 1)).Date.Format "2006" }} – {{ (index . 0).Date.Format "2006" }}{{ end }}</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+    <div class="timeline">
+      {{- range $posts.GroupByDate "2006" }}
+      <section class="timeline__group reveal">
+        <header class="timeline__head">
+          <span class="timeline__year">{{ .Key }}</span>
+          <span class="timeline__line" aria-hidden="true"></span>
+          <span class="timeline__count">{{ len .Pages }} 篇</span>
+        </header>
+        <ul class="timeline__list">
+          {{- range .Pages }}
+          <li class="timeline__item">
+            <time class="timeline__date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "01 / 02" }}</time>
+            <a class="timeline__link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+            <span class="timeline__tags">
+              {{- range first 2 .Params.tags }}<span class="tag tag--xs">{{ . }}</span>{{ end }}
+            </span>
+          </li>
+          {{- end }}
+        </ul>
+      </section>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{ end }}

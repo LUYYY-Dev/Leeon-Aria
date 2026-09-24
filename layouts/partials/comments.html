@@ -1,0 +1,33 @@
+{{- $c := site.Params.comments -}}
+{{- if and $c.enable (ne $c.repo "") (ne $c.repoId "") (ne $c.categoryId "") }}
+<section class="comments" id="comments">
+  <h2 class="comments__title">
+    <span class="section__mark"></span>讨论
+  </h2>
+  <p class="comments__hint">留言需要登录 GitHub 账号。</p>
+  <div class="comments__box">
+    <script src="https://giscus.app/client.js"
+            data-repo="{{ $c.repo }}"
+            data-repo-id="{{ $c.repoId }}"
+            data-category="{{ $c.category }}"
+            data-category-id="{{ $c.categoryId }}"
+            data-mapping="{{ $c.mapping | default "pathname" }}"
+            data-strict="0"
+            data-reactions-enabled="{{ $c.reactionsEnabled | default "1" }}"
+            data-emit-metadata="0"
+            data-input-position="{{ $c.inputPosition | default "top" }}"
+            data-theme="preferred_color_scheme"
+            data-lang="{{ $c.lang | default "zh-CN" }}"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async>
+    </script>
+  </div>
+</section>
+{{- else if $c.enable }}
+<section class="comments comments--notice" id="comments">
+  <h2 class="comments__title"><span class="section__mark"></span>讨论</h2>
+  <p>评论已开启，但还缺少 giscus 配置。请到 <code>hugo.toml</code> 的 <code>[params.comments]</code> 填入
+     <code>repo</code>、<code>repoId</code>、<code>categoryId</code>（在 <a href="https://giscus.app" target="_blank" rel="noopener">giscus.app</a> 生成）。</p>
+</section>
+{{- end -}}

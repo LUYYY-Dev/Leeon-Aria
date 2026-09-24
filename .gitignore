@@ -1,0 +1,17 @@
+# Hugo 构建产物
+public/
+resources/
+.hugo_build.lock
+
+# 本地工具（Hugo 二进制）与临时探测文件
+.tools/
+.probe/
+
+# 系统垃圾文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器
+.vscode/
+.idea/

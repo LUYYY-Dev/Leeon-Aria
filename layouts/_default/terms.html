@@ -1,0 +1,24 @@
+{{ define "main" }}
+<section class="page-head">
+  <div class="shell">
+    <p class="page-head__kicker reveal">分类法</p>
+    <h1 class="page-head__title reveal">{{ .Title }}</h1>
+    {{- with .Description }}<p class="page-head__desc reveal">{{ . }}</p>{{ end }}
+    <p class="page-head__meta reveal">共 {{ len .Pages }} 个</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+    <div class="term-grid">
+      {{- range .Pages.ByTitle }}
+      <a class="term-card reveal" href="{{ .RelPermalink }}">
+        <span class="term-card__hash" aria-hidden="true">#</span>
+        <span class="term-card__name">{{ .Title }}</span>
+        <span class="term-card__count">{{ len .Pages }} 篇</span>
+      </a>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{ end }}

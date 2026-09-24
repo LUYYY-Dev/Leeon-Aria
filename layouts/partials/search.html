@@ -1,0 +1,22 @@
+{{- if site.Params.search.enable }}
+<div class="search" id="searchModal" data-index="{{ "index.json" | relURL }}" hidden>
+  <div class="search__backdrop" data-search-close></div>
+  <div class="search__panel" role="dialog" aria-modal="true" aria-label="站内搜索">
+    <div class="search__head">
+      {{ partial "icon.html" (dict "name" "search" "size" 18) }}
+      <input class="search__input" id="searchInput" type="search" autocomplete="off" autocorrect="off"
+             spellcheck="false" placeholder="{{ site.Params.search.placeholder | default "搜索…" }}"
+             aria-label="搜索关键词">
+      <kbd class="search__kbd">ESC</kbd>
+    </div>
+    <div class="search__body" id="searchResults">
+      <p class="search__empty">输入关键词开始搜索，支持标题、标签和正文。</p>
+    </div>
+    <div class="search__foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
+      <span><kbd>Enter</kbd> 打开</span>
+      <span class="search__count" id="searchCount"></span>
+    </div>
+  </div>
+</div>
+{{- end -}}

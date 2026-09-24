@@ -1,0 +1,27 @@
+{{ define "main" }}
+{{- $pages := .Pages -}}
+<section class="page-head">
+  <div class="shell">
+    <p class="page-head__kicker reveal">{{ .Section | default "blog" }}</p>
+    <h1 class="page-head__title reveal">{{ .Title }}</h1>
+    {{- with .Description }}<p class="page-head__desc reveal">{{ . }}</p>{{ end }}
+    <p class="page-head__meta reveal">共 {{ len $pages }} 篇</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+    {{- if $pages }}
+    {{- $paginator := .Paginate $pages }}
+    <div class="grid">
+      {{- range $i, $p := $paginator.Pages }}
+      {{ partial "post-card.html" (dict "page" $p "index" (mod $i 3)) }}
+      {{- end }}
+    </div>
+    {{ partial "pagination.html" . }}
+    {{- else }}
+    <p class="empty">这里还没有内容。</p>
+    {{- end }}
+  </div>
+</section>
+{{ end }}

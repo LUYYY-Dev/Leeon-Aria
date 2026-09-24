@@ -1,0 +1,23 @@
+{{ define "main" }}
+<section class="error-page">
+  <div class="shell error-page__inner">
+    <p class="error-page__code" aria-hidden="true">404</p>
+    <h1 class="error-page__title">这个页面走丢了</h1>
+    <p class="error-page__text">它可能已经被移动、重命名，或者从来就没有存在过。</p>
+    <div class="error-page__actions">
+      <a class="btn btn--primary" href="{{ partial "url.html" "/" }}">回到首页</a>
+      {{- if site.Params.search.enable }}
+      <button class="btn btn--ghost" type="button" data-search-open>搜索全站</button>
+      {{- end }}
+    </div>
+    <div class="error-page__suggest">
+      <p class="error-page__suggest-title">或者看看这些</p>
+      <ul class="error-page__links">
+        {{- range first 3 (where site.RegularPages "Section" "posts").ByDate.Reverse }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{- end }}
+      </ul>
+    </div>
+  </div>
+</section>
+{{ end }}
