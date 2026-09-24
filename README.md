@@ -72,7 +72,18 @@ winget install Hugo.Hugo.Extended
 4. **不要**勾选 Add a README file
 5. 点 Create repository
 
-### 第 3 步：把本地代码推上去
+### 第 3 步：先开启 GitHub Pages（务必在推送之前做）
+
+1. 进入仓库，点 **Settings**
+2. 左侧选 **Pages**
+3. **Source** 选择 **GitHub Actions**
+4. 保存
+
+**顺序很重要。** GitHub 会在你推送的那一刻立刻启动构建，如果那时 Pages 还没开，
+工作流会失败在「读取 Pages 配置」这一步。补救办法：等 Pages 开好后重新跑一次
+（见第 5 步）。
+
+### 第 4 步：把本地代码推上去
 
 在这个文件夹里打开命令行（在文件夹地址栏输入 `cmd` 后回车），依次执行：
 
@@ -95,19 +106,12 @@ git config --global user.email "你的邮箱"
 首次推送需要登录 GitHub。推荐安装 GitHub CLI：`winget install GitHub.cli`，
 然后执行 `gh auth login` 按提示授权，之后推送就不需要再输密码了。
 
-### 第 4 步：开启 GitHub Pages
-
-1. 进入仓库，点 **Settings**
-2. 左侧选 **Pages**
-3. **Source** 选择 **GitHub Actions**
-4. 保存
-
-这一步必须做，否则自动部署会失败。
-
 ### 第 5 步：等待自动部署
 
 回到仓库的 **Actions** 标签页，会看到一个正在运行的 workflow。
-等它出现绿色对勾，网站就上线了：
+等它出现绿色对勾，网站就上线了。
+
+**注意网址要带仓库名**，项目仓库的地址是：
 
 ```
 https://LUYYY-Dev.github.io/Leeon-Aria/
@@ -187,7 +191,9 @@ series: ["系列名"]        # 可选
 说明 Hugo 没装好，先双击 `安装Hugo.cmd`。
 
 **推送后 Actions 报错？**
-打开仓库的 Actions 标签页，点进失败的那次运行看红色日志。最常见的原因是第 4 步没做。
+打开仓库的 Actions 标签页，点进失败的那次运行看红色日志。
+如果失败步骤是「读取 Pages 配置 / configure-pages」，说明推送时 Pages 还没开：
+开好 Pages 后，点右上角的 **Re-run all jobs** 重新跑一次即可。
 
 **网站打开是 404？**
 首次部署需要等 1~2 分钟。另外确认仓库是 Public，并且 Pages 的 Source 选了 GitHub Actions。
