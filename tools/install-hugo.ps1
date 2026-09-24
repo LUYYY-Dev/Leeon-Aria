@@ -25,7 +25,7 @@ if (Test-Path $exe) {
 $url = 'https://github.com/gohugoio/hugo/releases/download/v' + $version + '/hugo_extended_' + $version + '_windows-amd64.zip'
 $zip = Join-Path $env:TEMP ('hugo_extended_' + $version + '.zip')
 
-Write-Host '  正在下载 Hugo Extended ' + $version + '（约 23 MB）...'
+Write-Host ('  正在下载 Hugo Extended ' + $version + '（约 23 MB）...')
 Write-Host ''
 
 try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch { }

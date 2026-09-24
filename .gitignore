@@ -3,8 +3,11 @@ public/
 resources/
 .hugo_build.lock
 
-# 本地工具（Hugo 二进制）与临时探测文件
+# 本地工具（Hugo 二进制）以及任何临时备份目录
 .tools/
+.tools-*/
+
+# 临时探测文件
 .probe/
 
 # 系统垃圾文件
